@@ -60,12 +60,49 @@ class LinkedList:
       cursor.set_item(val)
       return
     raise IndexError("LinkedList index is out of range.")
+
+  def __contains__(self,val):
+    for e in self:
+      if e == val:
+        return True
+    return False
+
+  def __eq__(self,other):
+    if type(self) == type(other):
+      if self.num_items == other.num_items:
+        for e in range(self.num_items):
+          if self[e] != other[e]:
+            return False
+          return True
+      return False
+    return False
+# ^ compare if statement structures v
+  def __add__(self,other):
+    if type(self) != type(other):
+      raise TypeError("Concatenated data are not Linked Lists.")
+    super_list = LinkedList()
+    for e in self:
+      super_list.append(e)
+    for e in other:
+      super_list.append(e)
+    return super_list
+    
 def main():
   test_list = LinkedList(range(5))
+  twost_list = LinkedList([0,1,22,3,4])
   for e in test_list:
     print(e)
   print(test_list[0])
   test_list[2] = 22
   print(test_list)
+  if 31 in twost_list:
+    print("True")
+  else:
+    print("False")
+  if test_list == twost_list:
+    print("T")
+  else:
+    print("F")
+  print(test_list + twost_list)
 if __name__ == "__main__":
   main()
