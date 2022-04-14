@@ -1,3 +1,6 @@
+from random import shuffle
+from time import thread_time
+from statistics import median
 class LinkedList:
   
   class __Node:
@@ -86,8 +89,75 @@ class LinkedList:
     for e in other:
       super_list.append(e)
     return super_list
-    
+
+  def insert(self,index,item):
+    cursor = self.first
+    if index < self.num_items:
+      for _ in range(index):
+        cursor = cursor.get_next()
+      new_node = LinkedList.__Node(item,cursor.get_next())
+      cursor.set_next(new_node)
+      self.num_items += 1
+    else:
+      raise IndexError("LinkedList index out of range.")
+
+  def __delitem__(self,index):
+    cursor = self.first
+    if index < self.num_items:
+      for _ in range(index):
+        cursor = cursor.get_next()
+      new_next = cursor.get_next().get_next()
+      cursor.get_next().set_next(None)
+      cursor.set_next(new_next)
+      self.num_items -= 1
+    else:
+      raise IndexError("LinkedList index out of range.")
+
+  def __len__(self):
+    return self.num_items
+
+  def sorted(self):
+    cursor = self.first.get_next()
+    for _ in range(self.num_items-1):
+      if cursor.get_item() > cursor.get_next().get_item():
+        return False
+      cursor = cursor.get_next()
+    return True
+
+  def swap(self,i,j):
+    t = self[i]
+    self[i] = self[j]
+    self[j] = t
+
+  def bubble(self):
+    while not self.sorted():
+      for i in range(self.num_items-1):
+        if self[i] > self[i+1]:
+          self.swap(i,i+1)
+
+def test_bubble(n,averages):
+  for i in range(1,n):
+    times_sorted = []
+    times_shuffled = []
+    for j in range(averages):
+      bubblist = list(range(i))
+      bubblist = LinkedList(bubblist)
+      
+      sort_time_sorted = thread_time()
+      bubblist.bubble()
+      times_sorted.append(thread_time() - sort_time_sorted)
+      
+      bubblist = list(range(i))
+      shuffle(bubblist)
+      bubblist = LinkedList(bubblist)
+      
+      sort_time_shuffled = thread_time()
+      bubblist.bubble()
+      times_shuffled.append(thread_time() - sort_time_shuffled)
+      
+    print(f"{i},{median(times_sorted)},{median(times_shuffled)}")
 def main():
+  """
   test_list = LinkedList(range(5))
   twost_list = LinkedList([0,1,22,3,4])
   for e in test_list:
@@ -104,5 +174,16 @@ def main():
   else:
     print("F")
   print(test_list + twost_list)
+  twost_list.insert(3,0)
+  del twost_list[4]
+  print(twost_list)
+  print(len(twost_list))
+  print(twost_list.sorted())
+  twost_list.swap(0,4)
+  print(twost_list)
+  twost_list.bubble()
+  print(twost_list)
+  """
+  test_bubble(100,3)
 if __name__ == "__main__":
   main()
