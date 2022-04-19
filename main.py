@@ -135,27 +135,29 @@ class LinkedList:
         if self[i] > self[i+1]:
           self.swap(i,i+1)
 
-def test_bubble(n,averages):
-  for i in range(1,n):
-    times_sorted = []
-    times_shuffled = []
-    for j in range(averages):
-      bubblist = list(range(i))
-      bubblist = LinkedList(bubblist)
-      
-      sort_time_sorted = thread_time()
-      bubblist.bubble()
-      times_sorted.append(thread_time() - sort_time_sorted)
-      
-      bubblist = list(range(i))
-      shuffle(bubblist)
-      bubblist = LinkedList(bubblist)
-      
-      sort_time_shuffled = thread_time()
-      bubblist.bubble()
-      times_shuffled.append(thread_time() - sort_time_shuffled)
-      
-    print(f"{i},{median(times_sorted)},{median(times_shuffled)}")
+def test_bubble(n,averages,filename="test_bubble.csv"):
+  with open(filename, "w") as f:
+    for i in range(1,n):
+      print(f"Testing Length {i}")
+      times_sorted = []
+      times_shuffled = []
+      times_reversed = []
+      for j in range(averages):
+        times_sorted.append(timer(range(i)))
+  
+        shuffled_list = list(range(i))
+        shuffle(shuffled_list)
+        times_shuffled.append(timer(shuffled_list))
+
+        reversed_list = list(range(i,0,-1))
+        times_reversed.append(timer(reversed_list))
+        
+      f.write(f"{i},{median(times_sorted)},{median(times_shuffled)},{median(times_reversed)}\n")
+def timer(normlist):
+    linklist = LinkedList(normlist)
+    sort_time_sorted = thread_time()
+    linklist.bubble()
+    return thread_time() - sort_time_sorted
 def main():
   """
   test_list = LinkedList(range(5))
@@ -184,6 +186,9 @@ def main():
   twost_list.bubble()
   print(twost_list)
   """
+  start = thread_time()
   test_bubble(100,3)
+  end = thread_time() - start
+  print(end)
 if __name__ == "__main__":
   main()
