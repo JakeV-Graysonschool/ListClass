@@ -125,38 +125,97 @@ class LinkedList:
     return True
 
   def swap(self,i,j):
-    t = self[i]
+    """t = self[i]
     self[i] = self[j]
-    self[j] = t
-
+    self[j] = t """
+    if self[i] > self[j]:
+      min_swap = self[j]
+      max_swap = self[i]
+    else:
+      min_swap = self[i]
+      max_swap = self[j]
   def bubble(self):
     while not self.sorted():
       for i in range(self.num_items-1):
         if self[i] > self[i+1]:
           self.swap(i,i+1)
 
+  def selection(self):
+    unsort_min = 0
+    for n in range(self.num_items-1):
+      for i in range(self.num_items-1,unsort_min,-1):
+        if self[i] > self[i-1]:
+          cursor = i-1
+      self.swap(cursor,unsort_min)
+      unsort_min =+ 1
+
 def test_bubble(n,averages,filename="test_bubble.csv"):
   with open(filename, "w") as f:
-    for i in range(1,n):
+    for i in range(n,n+1):
       print(f"Testing Length {i}")
       times_sorted = []
       times_shuffled = []
       times_reversed = []
+      times_sortof = []
       for j in range(averages):
-        times_sorted.append(timer(range(i)))
-  
+        times_sorted.append(timer_select(range(i)))
+        
         shuffled_list = list(range(i))
         shuffle(shuffled_list)
-        times_shuffled.append(timer(shuffled_list))
-
+        times_shuffled.append(timer_select(shuffled_list))
+#        print(shuffled_list)
         reversed_list = list(range(i,0,-1))
-        times_reversed.append(timer(reversed_list))
+        times_reversed.append(timer_select(reversed_list))
+
+        sortish_list = list(range(i))
+        swap_sampler = list(range(i))
+        shuffle(swap_sampler)
+        swap1 = swap_sampler[0]
+        swap2 = swap_sampler[1]
+        sortish_list[swap1], sortish_list[swap2] = sortish_list[swap2], sortish_list[swap1]
+#        print(sortish_list)
+        times_sortof.append(timer_select(sortish_list))
         
-      f.write(f"{i},{median(times_sorted)},{median(times_shuffled)},{median(times_reversed)}\n")
-def timer(normlist):
+      f.write(f"{i},{median(times_sorted)},{median(times_shuffled)},{median(times_reversed)}, {median(times_sortof)}\n")
+      f.flush()
+def test_selection(n,averages,filename="test_selection.csv"):
+  with open(filename, "w") as f:
+    for i in range(n,n+1):
+      print(f"Testing Length {i}")
+      times_sorted = []
+      times_shuffled = []
+      times_reversed = []
+      times_sortof = []
+      for j in range(averages):
+        times_sorted.append(timer_bubble(range(i)))
+        
+        shuffled_list = list(range(i))
+        shuffle(shuffled_list)
+        times_shuffled.append(timer_bubble(shuffled_list))
+#        print(shuffled_list)
+        reversed_list = list(range(i,0,-1))
+        times_reversed.append(timer_bubble(reversed_list))
+
+        sortish_list = list(range(i))
+        swap_sampler = list(range(i))
+        shuffle(swap_sampler)
+        swap1 = swap_sampler[0]
+        swap2 = swap_sampler[1]
+        sortish_list[swap1], sortish_list[swap2] = sortish_list[swap2], sortish_list[swap1]
+#        print(sortish_list)
+        times_sortof.append(timer_bubble(sortish_list))
+        
+      f.write(f"{i},{median(times_sorted)},{median(times_shuffled)},{median(times_reversed)}, {median(times_sortof)}\n")
+      f.flush()
+def timer_bubble(normlist):
     linklist = LinkedList(normlist)
     sort_time_sorted = thread_time()
     linklist.bubble()
+    return thread_time() - sort_time_sorted
+def timer_select(normlist):
+    linklist = LinkedList(normlist)
+    sort_time_sorted = thread_time()
+    linklist.selection()
     return thread_time() - sort_time_sorted
 def main():
   """
@@ -185,10 +244,19 @@ def main():
   print(twost_list)
   twost_list.bubble()
   print(twost_list)
-  """
+  
   start = thread_time()
-  test_bubble(100,3)
+  test_bubble(200,3)
   end = thread_time() - start
   print(end)
+ 
+  start = thread_time()
+  test_bubble(200,3)
+  end = thread_time() - start
+  print(end)
+  """
+  list1 = (5,2,6,7,3)
+  test = test_selection(10,3)
+  print(test)
 if __name__ == "__main__":
   main()
