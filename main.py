@@ -128,12 +128,21 @@ class LinkedList:
     """t = self[i]
     self[i] = self[j]
     self[j] = t """
-    if self[i] > self[j]:
-      min_swap = self[j]
-      max_swap = self[i]
-    else:
-      min_swap = self[i]
-      max_swap = self[j]
+    mindex = min(i,j)
+    maxdex = max(i,j)
+    cursor = self.first.get_next()
+    for _ in range(mindex):
+      if cursor is not None:
+        cursor = get_next
+    min_node = cursor
+    for _ in range(maxdex - mindex):
+      if cursor is not None:
+        cursor = cursor.get_next()
+    max_node = cursor
+    temp = min_node.get_item()
+    min_node.set_item(max_node.get_item())
+    max_node.set_item(temp)
+    
   def bubble(self):
     while not self.sorted():
       for i in range(self.num_items-1):
@@ -142,12 +151,22 @@ class LinkedList:
 
   def selection(self):
     unsort_min = 0
-    for n in range(self.num_items-1):
-      for i in range(self.num_items-1,unsort_min,-1):
-        if self[i] > self[i-1]:
-          cursor = i-1
-      self.swap(cursor,unsort_min)
+    workin_list = self
+    for i,item in enumerate(range(self.num_items-1,unsort_min,-1)):
+      swapdex = min_find(workin_list)
       unsort_min =+ 1
+    # unfinished
+    print(self)
+
+  def min_find(self):
+    mindex = 0
+    minue = self[0]
+    for i,item in enumerate(self):
+      if item < minue:
+        minue = item
+        mindex = i
+    return mindex
+      
 
 def test_bubble(n,averages,filename="test_bubble.csv"):
   with open(filename, "w") as f:
