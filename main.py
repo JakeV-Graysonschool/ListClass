@@ -133,7 +133,7 @@ class LinkedList:
     cursor = self.first.get_next()
     for _ in range(mindex):
       if cursor is not None:
-        cursor = get_next
+        cursor = cursor.get_next()
     min_node = cursor
     for _ in range(maxdex - mindex):
       if cursor is not None:
@@ -150,56 +150,23 @@ class LinkedList:
           self.swap(i,i+1)
 
   def selection(self):
-    unsort_min = 0
-    workin_list = self
-    for i,item in enumerate(range(self.num_items-1,unsort_min,-1)):
-      swapdex = min_find(workin_list)
-      unsort_min =+ 1
-    # unfinished
-    print(self)
-
-  def min_find(self):
-    mindex = 0
-    minue = self[0]
     for i,item in enumerate(self):
-      if item < minue:
+      swapdex = self.min_find(i)
+      self.swap(i,swapdex)
+    return self
+
+  def min_find(self,first=0):
+    mindex = first
+    minue = self[first]
+    for i,item in enumerate(self):
+      if i >= mindex and item < minue:
         minue = item
         mindex = i
     return mindex
-      
 
 def test_bubble(n,averages,filename="test_bubble.csv"):
   with open(filename, "w") as f:
-    for i in range(n,n+1):
-      print(f"Testing Length {i}")
-      times_sorted = []
-      times_shuffled = []
-      times_reversed = []
-      times_sortof = []
-      for j in range(averages):
-        times_sorted.append(timer_select(range(i)))
-        
-        shuffled_list = list(range(i))
-        shuffle(shuffled_list)
-        times_shuffled.append(timer_select(shuffled_list))
-#        print(shuffled_list)
-        reversed_list = list(range(i,0,-1))
-        times_reversed.append(timer_select(reversed_list))
-
-        sortish_list = list(range(i))
-        swap_sampler = list(range(i))
-        shuffle(swap_sampler)
-        swap1 = swap_sampler[0]
-        swap2 = swap_sampler[1]
-        sortish_list[swap1], sortish_list[swap2] = sortish_list[swap2], sortish_list[swap1]
-#        print(sortish_list)
-        times_sortof.append(timer_select(sortish_list))
-        
-      f.write(f"{i},{median(times_sorted)},{median(times_shuffled)},{median(times_reversed)}, {median(times_sortof)}\n")
-      f.flush()
-def test_selection(n,averages,filename="test_selection.csv"):
-  with open(filename, "w") as f:
-    for i in range(n,n+1):
+    for i in range(2,n+1):
       print(f"Testing Length {i}")
       times_sorted = []
       times_shuffled = []
@@ -226,16 +193,49 @@ def test_selection(n,averages,filename="test_selection.csv"):
         
       f.write(f"{i},{median(times_sorted)},{median(times_shuffled)},{median(times_reversed)}, {median(times_sortof)}\n")
       f.flush()
+      
+def test_selection(n,averages,filename="test_selection.csv"):
+  with open(filename, "w") as f:
+    for i in range(2,n+1):
+      print(f"Testing Length {i}")
+      times_sorted = []
+      times_shuffled = []
+      times_reversed = []
+      times_sortof = []
+      for j in range(averages):
+        times_sorted.append(timer_selection(range(i)))
+        
+        shuffled_list = list(range(i))
+        shuffle(shuffled_list)
+        times_shuffled.append(timer_selection(shuffled_list))
+#        print(shuffled_list)
+        reversed_list = list(range(i,0,-1))
+        times_reversed.append(timer_selection(reversed_list))
+
+        sortish_list = list(range(i))
+        swap_sampler = list(range(i))
+        shuffle(swap_sampler)
+        swap1 = swap_sampler[0]
+        swap2 = swap_sampler[1]
+        sortish_list[swap1], sortish_list[swap2] = sortish_list[swap2], sortish_list[swap1]
+#        print(sortish_list)
+        times_sortof.append(timer_selection(sortish_list))
+        
+      f.write(f"{i},{median(times_sorted)},{median(times_shuffled)},{median(times_reversed)}, {median(times_sortof)}\n")
+      f.flush()
+      
 def timer_bubble(normlist):
     linklist = LinkedList(normlist)
     sort_time_sorted = thread_time()
     linklist.bubble()
     return thread_time() - sort_time_sorted
-def timer_select(normlist):
+  
+def timer_selection(normlist):
     linklist = LinkedList(normlist)
     sort_time_sorted = thread_time()
     linklist.selection()
     return thread_time() - sort_time_sorted
+  
 def main():
   """
   test_list = LinkedList(range(5))
@@ -265,17 +265,19 @@ def main():
   print(twost_list)
   
   start = thread_time()
-  test_bubble(200,3)
+  test_bubble(50,3)
   end = thread_time() - start
   print(end)
- 
-  start = thread_time()
-  test_bubble(200,3)
-  end = thread_time() - start
-  print(end)
+
+  
+  list1 = LinkedList([5,2,6,7,3])
+  sortest = list1.selection()
+  print(sortest)
   """
-  list1 = (5,2,6,7,3)
-  test = test_selection(10,3)
-  print(test)
+  start = thread_time()
+  test_selection(200,3)
+  end = thread_time() - start
+  print(end)
+  
 if __name__ == "__main__":
   main()
