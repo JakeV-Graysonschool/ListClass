@@ -55,6 +55,7 @@ class LinkedList:
         cursor = cursor.get_next()
       return cursor.get_item()
     raise IndexError("LinkedList index is out of range.")
+    
   def __setitem__(self,index,val):
     if 0 <= index < self.num_items:
       cursor = self.first.get_next()
@@ -163,6 +164,15 @@ class LinkedList:
         minue = item
         mindex = i
     return mindex
+
+  def splist(self):
+    len = self.len()
+    newst = LinkedList([(len//2)-1])
+    for i in range(0,(len//2)-1):
+      newst.append(self[i])
+    for i in range((len//2),len-1):
+      del self[i]
+    return newst
 
 def test_bubble(n,averages,filename="test_bubble.csv"):
   with open(filename, "w") as f:
@@ -273,11 +283,16 @@ def main():
   list1 = LinkedList([5,2,6,7,3])
   sortest = list1.selection()
   print(sortest)
-  """
+  
   start = thread_time()
   test_selection(200,3)
   end = thread_time() - start
   print(end)
-  
+  """
+  test = [1,2,3,4]
+  new = splist(test)
+  print(test)
+  print(new)
+  #^ continue divising test
 if __name__ == "__main__":
   main()
