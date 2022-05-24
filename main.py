@@ -104,6 +104,8 @@ class LinkedList:
 
   def __delitem__(self,index):
     cursor = self.first
+    print(index)
+    print(self.num_items,"-")
     if index < self.num_items:
       for _ in range(index):
         cursor = cursor.get_next()
@@ -165,13 +167,21 @@ class LinkedList:
         mindex = i
     return mindex
 
-  def splist(self):
-    len = self.len()
-    newst = LinkedList([(len//2)-1])
-    for i in range(0,(len//2)-1):
-      newst.append(self[i])
-    for i in range((len//2),len-1):
-      del self[i]
+  def splist(self,start=True):
+    leng = len(self)
+    newst = LinkedList()
+    cursor = self.first.get_next()
+    for i in range(0,(leng//2)-1):
+      cursor = cursor.get_next()
+    new_tail = cursor
+    cursor = cursor.get_next()
+    new_head = cursor
+    new_tail.set_next(None)
+    self.num_items = leng//2
+    print(len(self))
+    newst.first.set_next(new_head)
+    newst.num_items = leng - leng//2
+    print(len(newst))
     return newst
 
 def test_bubble(n,averages,filename="test_bubble.csv"):
@@ -289,8 +299,8 @@ def main():
   end = thread_time() - start
   print(end)
   """
-  test = [1,2,3,4]
-  new = splist(test)
+  test = LinkedList([1,2,3,4,5,6,7,8,9,10,11])
+  new = test.splist()
   print(test)
   print(new)
   #^ continue divising test
