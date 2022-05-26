@@ -167,7 +167,7 @@ class LinkedList:
         mindex = i
     return mindex
 
-  def splist(self,start=True):
+  def splist(self):
     leng = len(self)
     newst = LinkedList()
     cursor = self.first.get_next()
@@ -178,12 +178,25 @@ class LinkedList:
     new_head = cursor
     new_tail.set_next(None)
     self.num_items = leng//2
-    print(len(self))
     newst.first.set_next(new_head)
     newst.num_items = leng - leng//2
-    print(len(newst))
     return newst
 
+  def merge(self,self_0):
+    print(self_0)
+    leng = len(self)
+    old_head = self_0.first.get_next()
+    self.last.set_next(old_head)
+    self.num_items = leng + len(self_0)
+# ^ misc. shennanigans
+  def merge_sort(self):
+    if len(self) > 1:
+      newst = self.splist()
+      print(self,"s",newst,"n")
+      newst.merge_sort()
+      self.merge_sort()
+      self.merge(newst)
+    
 def test_bubble(n,averages,filename="test_bubble.csv"):
   with open(filename, "w") as f:
     for i in range(2,n+1):
@@ -298,11 +311,15 @@ def main():
   test_selection(200,3)
   end = thread_time() - start
   print(end)
-  """
+  
   test = LinkedList([1,2,3,4,5,6,7,8,9,10,11])
   new = test.splist()
   print(test)
   print(new)
-  #^ continue divising test
+  """
+  mergelistA = LinkedList([1,2])
+  mergelistB = LinkedList([3,4])
+  mergelistA.merge_sort()
+  print(mergelistA)
 if __name__ == "__main__":
   main()
