@@ -182,17 +182,33 @@ class LinkedList:
     newst.num_items = leng - leng//2
     return newst
 
-  def merge(self,self_0):
-    print(self_0)
-    leng = len(self)
-    old_head = self_0.first.get_next()
-    self.last.set_next(old_head)
-    self.num_items = leng + len(self_0)
-# ^ misc. shennanigans
+  def merge(self,self2):
+    firststart = self
+    secondstart = self2
+    cursor1 = firststart.first.get_next()
+    cursor2 = secondstart.first.get_next()   
+    if cursor2.get_item() < cursor1.get_item():
+      self.first.set_item(cursor2)
+      self2.fist.set_item(None)
+      for i,item in enumerate(secondstart):
+        cursor2.get_next()
+        
+      
+  """
+    leng = len(firststart)
+    old_head = secondstart.first.get_next()
+    cursor = firststart.first.get_next()
+    for i in range(0,leng-1):
+      cursor = cursor.get_next()
+    cursor.set_next(old_head)
+    self.num_items = leng + len(secondstart)"""
+    print(len(self),"len")
+    print(self,"+n 2.0")
+# ^ misc. shennanigans + additional tomfooleries
   def merge_sort(self):
     if len(self) > 1:
       newst = self.splist()
-      print(self,"s",newst,"n")
+#      print(self,"/s",newst,"/n")
       newst.merge_sort()
       self.merge_sort()
       self.merge(newst)
@@ -317,7 +333,7 @@ def main():
   print(test)
   print(new)
   """
-  mergelistA = LinkedList([1,2])
+  mergelistA = LinkedList([1,5,2,6])
   mergelistB = LinkedList([3,4])
   mergelistA.merge_sort()
   print(mergelistA)
