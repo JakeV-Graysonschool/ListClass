@@ -180,30 +180,26 @@ class LinkedList:
     self.num_items = leng//2
     newst.first.set_next(new_head)
     newst.num_items = leng - leng//2
+    print(self,"<-self",newst,"<-newst")
     return newst
 
   def merge(self,self2):
-    firststart = self
-    secondstart = self2
-    cursor1 = firststart.first.get_next()
-    cursor2 = secondstart.first.get_next()   
-    if cursor2.get_item() < cursor1.get_item():
-      self.first.set_item(cursor2)
-      self2.fist.set_item(None)
-      for i,item in enumerate(secondstart):
-        cursor2.get_next()
-        
-      
-  """
-    leng = len(firststart)
-    old_head = secondstart.first.get_next()
-    cursor = firststart.first.get_next()
-    for i in range(0,leng-1):
-      cursor = cursor.get_next()
-    cursor.set_next(old_head)
-    self.num_items = leng + len(secondstart)"""
-    print(len(self),"len")
-    print(self,"+n 2.0")
+    cursor1 = self.first.get_next()
+    cursor2 = self2.first.get_next()
+    while cursor1 is not None and cursor2 is not None:
+      print("est")
+      if cursor2.get_item() < cursor1.get_item():
+        print("1st >")
+        cursor_temp = cursor1
+        cursor1.set_item(cursor2)
+        cursor1.set_next(cursor_temp)
+        cursor1.get_next()
+      else:
+        print("2nd >")
+        cursor1.get_next()
+      #print(len(self),"len")
+    print(self,"<-self")      
+
 # ^ misc. shennanigans + additional tomfooleries
   def merge_sort(self):
     if len(self) > 1:
@@ -212,6 +208,7 @@ class LinkedList:
       newst.merge_sort()
       self.merge_sort()
       self.merge(newst)
+    
     
 def test_bubble(n,averages,filename="test_bubble.csv"):
   with open(filename, "w") as f:
@@ -333,7 +330,7 @@ def main():
   print(test)
   print(new)
   """
-  mergelistA = LinkedList([1,5,2,6])
+  mergelistA = LinkedList([5,1,2,6])
   mergelistB = LinkedList([3,4])
   mergelistA.merge_sort()
   print(mergelistA)
